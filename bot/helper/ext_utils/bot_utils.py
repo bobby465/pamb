@@ -99,10 +99,14 @@ def get_readable_message():
             else:
             	msg += f"\n<b>Uploaded :</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
             msg += f"\n<b>Speed🌬 :</b> {download.speed()}, \n<b>ETA:</b> {download.eta()} "	
-                if hasattr(download, 'is_torrent'):
+                # if hasattr(download,'is_torrent'):
+                try:
                     msg += f"\n<b>Peers🥀 :</b> {download.aria_download().connections} " \
                            f"| <b>Seeders🌾 :</b> {download.aria_download().num_seeders}"
-                msg += f"\n<b>To Cancel🚫 :</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
+                except:
+                	pass
+            if download.status() == MirrorStatus.STATUS_DOWNLOADING:   	
+            	msg += f"\n<b>To Cancel🚫 :</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
             ch = "_"
             nm = 25
             final = ch * nm
