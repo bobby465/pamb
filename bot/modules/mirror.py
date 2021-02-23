@@ -1,3 +1,6 @@
+import requests
+from telegram.ext import CommandHandler, run_async
+
 from bot import Interval, INDEX_URL
 from bot import dispatcher, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, download_dict, download_dict_lock
 from bot.helper.ext_utils import fs_utils, bot_utils
@@ -105,16 +108,16 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, link: str):
         with download_dict_lock:
-        	uname = f'<a href="tg://user?id={update.message.from_user.id}">{update.message.from_user.first_name}</a>'
             msg = f'<b>🗂File Name</b> : <a href="{link}">{download_dict[self.uid].name()}</a>\n\n<b>⚖️Size</b> : <code>{download_dict[self.uid].size()}</code>'
+            uname = f'<a href="tg://user?id={update.message.from_user.id}">{update.message.from_user.first_name}</a>'
             msg += f'\n\nHei {uname}, your file is uploaded😌'
             LOGGER.info(f'Done Uploading {download_dict[self.uid].name()}')
             if INDEX_URL is not None:
                 share_url = requests.utils.requote_uri(f'{INDEX_URL}/{download_dict[self.uid].name()}')
                 if os.path.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{download_dict[self.uid].name()}'):
-                    share_url += '/' 
+                    share_url += '/'
                 msg += f'\n\n<b>🌍Index Link</b> : <a href="{share_url}">Click Here</a>'
-            msg += f'\n#Uploads 💖'    
+            msg += f'\n#Uploads 💖'
             try:
                 fs_utils.clean_download(download_dict[self.uid].path())
             except FileNotFoundError:
