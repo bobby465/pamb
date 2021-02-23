@@ -111,8 +111,8 @@ class MirrorListener(listeners.MirrorListeners):
             msg = f'<b>🗂File Name</b> : <a href="{link}">{download_dict[self.uid].name()}</a>\n\n<b>⚖️Size</b> : <code>{download_dict[self.uid].size()}</code>'
             if self.message.from_user.username:
             	uname = f"@{self.message.from_user.username}"
-        	else:
-        		uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
+            else:
+                uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
             if uname is not None:    
                 msg += f'\n\nHei {uname}, your file is uploaded😌'
             LOGGER.info(f'Done Uploading {download_dict[self.uid].name()}')
